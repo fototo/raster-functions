@@ -104,11 +104,5 @@ References:
     [1]. Nagi, R. (2014), Introducing Esri's Next Generation Hillshade
     http://blogs.esri.com/esri/arcgis/2014/07/14/introducing-esris-next-generation-hillshade/
 
-    [2]. Esri (2013): ArcGIS Resources. How Hillshade works.
-    http://resources.arcgis.com/en/help/main/10.2/index.html#//009z000000z2000000
-
-    [3]. Burrough, P. A. and McDonell, R. A., 1998. 
-    Principles of Geographical Information Systems (Oxford University Press, New York), 190 pp.
-
 """
 
