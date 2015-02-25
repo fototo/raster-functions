@@ -66,7 +66,7 @@ class MultidirectionalHillshade():
         for i in range(len(self.azimuths)):
             self.H.append(Hillshade())
             self.H[i].prepare(azimuth=self.azimuths[i], elevation=self.elevations[i], 
-                              zFactor=zf, cellSize=e['cellSize'], sr=e['spatialReference'])
+                              zFactor=zf, sr=e['spatialReference'])
         return kwargs
 
 
