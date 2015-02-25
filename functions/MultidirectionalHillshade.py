@@ -73,7 +73,7 @@ class MultidirectionalHillshade():
     def updatePixels(self, tlc, shape, props, **pixelBlocks):
         v = np.array(pixelBlocks['raster_pixels'], dtype='f4', copy=False)
 
-        dx, dy = self.H[0].computeGradients(v)      # gradients depend only on the z-factor which doesn't vary across H's
+        dx, dy = self.H[0].computeGradients(v, props)   # gradients depend only on the z-factor which doesn't vary across H's
         outBlock = self.weights[0] * self.H[0].computeHillshade(dx, dy)
         for i in range(1, 6):                       # 6 == len(self.azimuths)
             outBlock += (self.weights[i] * self.H[i].computeHillshade(dx, dy))
