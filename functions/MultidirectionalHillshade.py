@@ -1,6 +1,6 @@
 from scipy import ndimage
 import numpy as np
-import math 
+import math
 from Hillshade import Hillshade
 
 
@@ -39,7 +39,7 @@ class MultidirectionalHillshade():
         ]
 
 
-    def getConfiguration(self, **scalars): 
+    def getConfiguration(self, **scalars):
         return {
           'extractBands': (0,),                 # we only need the first band.  Comma after zero ensures it's a tuple.
           'inheritProperties': 4 | 8,           # inherit everything but the pixel type (1) and NoData (2)
@@ -56,16 +56,17 @@ class MultidirectionalHillshade():
         kwargs['output_info']['pixelType'] = 'u1'
         kwargs['output_info']['statistics'] = ({'minimum': 0.0, 'maximum': 255.0}, )
         kwargs['output_info']['histogram'] = ()
+        kwargs['output_info']['resampling'] = False         # Resampling set explicitly to False
         kwargs['output_info']['colormap'] = ()
 
         e = kwargs['raster_info']
-        if e['bandCount'] > 1: 
+        if e['bandCount'] > 1:
             raise Exception("Input raster must have a single band.")
 
         self.H = []
         for i in range(len(self.azimuths)):
             self.H.append(Hillshade())
-            self.H[i].prepare(azimuth=self.azimuths[i], elevation=self.elevations[i], 
+            self.H[i].prepare(azimuth=self.azimuths[i], elevation=self.elevations[i],
                               zFactor=zf, sr=e['spatialReference'])
         return kwargs
 
@@ -77,7 +78,7 @@ class MultidirectionalHillshade():
         outBlock = self.weights[0] * self.H[0].computeHillshade(dx, dy)
         for i in range(1, 6):                       # 6 == len(self.azimuths)
             outBlock += (self.weights[i] * self.H[i].computeHillshade(dx, dy))
-        
+
         pixelBlocks['output_pixels'] = outBlock[1:-1, 1:-1].astype(props['pixelType'], copy=False)  # undo padding
 
         m = np.array(pixelBlocks['raster_mask'], dtype='u1', copy=False)
@@ -88,10 +89,10 @@ class MultidirectionalHillshade():
 
 
     def updateKeyMetadata(self, names, bandIndex, **keyMetadata):
-        if bandIndex == -1:                             # dataset-level properties           
+        if bandIndex == -1:                             # dataset-level properties
             keyMetadata['datatype'] = 'Processed'       # outgoing dataset is now 'Processed'
         elif bandIndex == 0:                            # properties for the first band
-            keyMetadata['wavelengthmin'] = None         # reset inapplicable band-specific key metadata 
+            keyMetadata['wavelengthmin'] = None         # reset inapplicable band-specific key metadata
             keyMetadata['wavelengthmax'] = None
             keyMetadata['bandname'] = 'Hillshade'
         return keyMetadata
